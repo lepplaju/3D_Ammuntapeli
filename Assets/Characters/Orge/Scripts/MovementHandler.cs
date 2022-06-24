@@ -49,6 +49,14 @@ public class @MovementHandler : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Ultraspeed"",
+                    ""type"": ""Value"",
+                    ""id"": ""dd97db50-d82d-4c37-9b0c-2a3371ffce77"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -161,6 +169,17 @@ public class @MovementHandler : IInputActionCollection, IDisposable
                     ""action"": ""Run"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5472c802-621e-4c4a-a719-f9d240ec3d97"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Ultraspeed"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -173,6 +192,7 @@ public class @MovementHandler : IInputActionCollection, IDisposable
         m_Controls_Look = m_Controls.FindAction("Look", throwIfNotFound: true);
         m_Controls_Jump = m_Controls.FindAction("Jump", throwIfNotFound: true);
         m_Controls_Run = m_Controls.FindAction("Run", throwIfNotFound: true);
+        m_Controls_Ultraspeed = m_Controls.FindAction("Ultraspeed", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -226,6 +246,7 @@ public class @MovementHandler : IInputActionCollection, IDisposable
     private readonly InputAction m_Controls_Look;
     private readonly InputAction m_Controls_Jump;
     private readonly InputAction m_Controls_Run;
+    private readonly InputAction m_Controls_Ultraspeed;
     public struct ControlsActions
     {
         private @MovementHandler m_Wrapper;
@@ -234,6 +255,7 @@ public class @MovementHandler : IInputActionCollection, IDisposable
         public InputAction @Look => m_Wrapper.m_Controls_Look;
         public InputAction @Jump => m_Wrapper.m_Controls_Jump;
         public InputAction @Run => m_Wrapper.m_Controls_Run;
+        public InputAction @Ultraspeed => m_Wrapper.m_Controls_Ultraspeed;
         public InputActionMap Get() { return m_Wrapper.m_Controls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -255,6 +277,9 @@ public class @MovementHandler : IInputActionCollection, IDisposable
                 @Run.started -= m_Wrapper.m_ControlsActionsCallbackInterface.OnRun;
                 @Run.performed -= m_Wrapper.m_ControlsActionsCallbackInterface.OnRun;
                 @Run.canceled -= m_Wrapper.m_ControlsActionsCallbackInterface.OnRun;
+                @Ultraspeed.started -= m_Wrapper.m_ControlsActionsCallbackInterface.OnUltraspeed;
+                @Ultraspeed.performed -= m_Wrapper.m_ControlsActionsCallbackInterface.OnUltraspeed;
+                @Ultraspeed.canceled -= m_Wrapper.m_ControlsActionsCallbackInterface.OnUltraspeed;
             }
             m_Wrapper.m_ControlsActionsCallbackInterface = instance;
             if (instance != null)
@@ -271,6 +296,9 @@ public class @MovementHandler : IInputActionCollection, IDisposable
                 @Run.started += instance.OnRun;
                 @Run.performed += instance.OnRun;
                 @Run.canceled += instance.OnRun;
+                @Ultraspeed.started += instance.OnUltraspeed;
+                @Ultraspeed.performed += instance.OnUltraspeed;
+                @Ultraspeed.canceled += instance.OnUltraspeed;
             }
         }
     }
@@ -281,5 +309,6 @@ public class @MovementHandler : IInputActionCollection, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
+        void OnUltraspeed(InputAction.CallbackContext context);
     }
 }
