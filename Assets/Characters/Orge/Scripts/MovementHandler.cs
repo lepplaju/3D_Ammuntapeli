@@ -44,17 +44,17 @@ public class @MovementHandler : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": ""Run"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""615024fb-7ffd-458e-9661-cb47da95fe96"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Ultraspeed"",
-                    ""type"": ""Value"",
-                    ""id"": ""dd97db50-d82d-4c37-9b0c-2a3371ffce77"",
-                    ""expectedControlType"": """",
+                    ""name"": ""AimWeapon"",
+                    ""type"": ""Button"",
+                    ""id"": ""3c3f9905-94f9-4d69-b2f3-52238cbf6214"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
                 }
@@ -162,7 +162,7 @@ public class @MovementHandler : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""d77f5f14-98d1-455f-ae93-435c3a1af13c"",
-                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -172,12 +172,12 @@ public class @MovementHandler : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""5472c802-621e-4c4a-a719-f9d240ec3d97"",
-                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""id"": ""5d59a481-b546-4936-b5d1-012d1e57578c"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Ultraspeed"",
+                    ""action"": ""AimWeapon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -192,7 +192,7 @@ public class @MovementHandler : IInputActionCollection, IDisposable
         m_Controls_Look = m_Controls.FindAction("Look", throwIfNotFound: true);
         m_Controls_Jump = m_Controls.FindAction("Jump", throwIfNotFound: true);
         m_Controls_Run = m_Controls.FindAction("Run", throwIfNotFound: true);
-        m_Controls_Ultraspeed = m_Controls.FindAction("Ultraspeed", throwIfNotFound: true);
+        m_Controls_AimWeapon = m_Controls.FindAction("AimWeapon", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -246,7 +246,7 @@ public class @MovementHandler : IInputActionCollection, IDisposable
     private readonly InputAction m_Controls_Look;
     private readonly InputAction m_Controls_Jump;
     private readonly InputAction m_Controls_Run;
-    private readonly InputAction m_Controls_Ultraspeed;
+    private readonly InputAction m_Controls_AimWeapon;
     public struct ControlsActions
     {
         private @MovementHandler m_Wrapper;
@@ -255,7 +255,7 @@ public class @MovementHandler : IInputActionCollection, IDisposable
         public InputAction @Look => m_Wrapper.m_Controls_Look;
         public InputAction @Jump => m_Wrapper.m_Controls_Jump;
         public InputAction @Run => m_Wrapper.m_Controls_Run;
-        public InputAction @Ultraspeed => m_Wrapper.m_Controls_Ultraspeed;
+        public InputAction @AimWeapon => m_Wrapper.m_Controls_AimWeapon;
         public InputActionMap Get() { return m_Wrapper.m_Controls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -277,9 +277,9 @@ public class @MovementHandler : IInputActionCollection, IDisposable
                 @Run.started -= m_Wrapper.m_ControlsActionsCallbackInterface.OnRun;
                 @Run.performed -= m_Wrapper.m_ControlsActionsCallbackInterface.OnRun;
                 @Run.canceled -= m_Wrapper.m_ControlsActionsCallbackInterface.OnRun;
-                @Ultraspeed.started -= m_Wrapper.m_ControlsActionsCallbackInterface.OnUltraspeed;
-                @Ultraspeed.performed -= m_Wrapper.m_ControlsActionsCallbackInterface.OnUltraspeed;
-                @Ultraspeed.canceled -= m_Wrapper.m_ControlsActionsCallbackInterface.OnUltraspeed;
+                @AimWeapon.started -= m_Wrapper.m_ControlsActionsCallbackInterface.OnAimWeapon;
+                @AimWeapon.performed -= m_Wrapper.m_ControlsActionsCallbackInterface.OnAimWeapon;
+                @AimWeapon.canceled -= m_Wrapper.m_ControlsActionsCallbackInterface.OnAimWeapon;
             }
             m_Wrapper.m_ControlsActionsCallbackInterface = instance;
             if (instance != null)
@@ -296,9 +296,9 @@ public class @MovementHandler : IInputActionCollection, IDisposable
                 @Run.started += instance.OnRun;
                 @Run.performed += instance.OnRun;
                 @Run.canceled += instance.OnRun;
-                @Ultraspeed.started += instance.OnUltraspeed;
-                @Ultraspeed.performed += instance.OnUltraspeed;
-                @Ultraspeed.canceled += instance.OnUltraspeed;
+                @AimWeapon.started += instance.OnAimWeapon;
+                @AimWeapon.performed += instance.OnAimWeapon;
+                @AimWeapon.canceled += instance.OnAimWeapon;
             }
         }
     }
@@ -309,6 +309,6 @@ public class @MovementHandler : IInputActionCollection, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
-        void OnUltraspeed(InputAction.CallbackContext context);
+        void OnAimWeapon(InputAction.CallbackContext context);
     }
 }

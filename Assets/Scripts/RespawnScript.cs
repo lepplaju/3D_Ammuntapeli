@@ -10,7 +10,6 @@ public class RespawnScript : MonoBehaviour
     private Transform respwanPoint;
     private void OnTriggerEnter(Collider other)
     {
-
         if (other.CompareTag("Player"))
         {
             character.transform.position = respwanPoint.transform.position;

@@ -2,18 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using Cinemachine;
 public class SimpleMovementScript : MonoBehaviour
 {
     MovementHandler playerInput;
     CharacterController charController;
     Animator animator;
+    Rigidbody[] rigidbodies;
+
+    [SerializeField]
+    private CinemachineFreeLook freelook;
+
+    [SerializeField]
+    private CinemachineFreeLook freelookZoomed;
+
     [SerializeField]
     private Transform character;
     [SerializeField]
     private Transform respwanPoint;
     [SerializeField]
     private Transform cameraTransform;
+    [SerializeField]
+    private Transform LookAtWhenAiming;
+    [SerializeField]
+    private Transform LookAtWhenNotAiming;
 
     int isWalkingHash;
     int isRunningHash;
@@ -38,13 +50,23 @@ public class SimpleMovementScript : MonoBehaviour
     readonly float maxJumpTime = 1.0f;
     bool isJumping = false;
 
+    bool isAimPressed;
+    readonly float fieldOfViewVal =45;
+    readonly float zoomValue = 30f;
 
     // Heti alussa tehdään kaikki tämän funktion sisällä oleva
     private void Awake()
     {
+        GameObject freelookObj = GameObject.FindWithTag("VirtualCamera");
+        freelook = freelookObj.GetComponent<CinemachineFreeLook>();
+        GameObject freelookObjZoomed = GameObject.FindWithTag("VirtualCameraZoomed");
+        freelookZoomed = freelookObjZoomed.GetComponent<CinemachineFreeLook>();
+
+        //Mycamera = Camera.main;
         playerInput = new MovementHandler();
         charController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
+        rigidbodies = GetComponentsInChildren<Rigidbody>();
 
         isWalkingHash = Animator.StringToHash("isWalking");
         isRunningHash = Animator.StringToHash("isRunning");
@@ -55,17 +77,25 @@ public class SimpleMovementScript : MonoBehaviour
         playerInput.Controls.Move.performed += OnMovementInput;
         playerInput.Controls.Jump.started += OnJump;
         playerInput.Controls.Jump.canceled += OnJump;
-        playerInput.Controls.Ultraspeed.started += OnUltraSpeed;
-        playerInput.Controls.Ultraspeed.canceled += OnUltraSpeed;
+        playerInput.Controls.Run.started += OnRun;
+        playerInput.Controls.Run.canceled += OnRun;
+        playerInput.Controls.AimWeapon.started += OnAim;
+        playerInput.Controls.AimWeapon.canceled += OnAim;
 
         SetupJumpVariables();
+        DeactivateRagdoll();
+    }
+
+    void OnAim(InputAction.CallbackContext context)
+    {
+        isAimPressed = context.ReadValueAsButton();
     }
     void OnJump(InputAction.CallbackContext context)
     {
         isJumpPressed = context.ReadValueAsButton();
     }
 
-    void OnUltraSpeed(InputAction.CallbackContext context) // Juoku uudellleennimettynä ja eri painikkeen avulla
+    void OnRun(InputAction.CallbackContext context) // Juoksu uudellleennimettynä ja eri painikkeen avulla
     {
         L2_value = context.ReadValue<float>();
     }
@@ -86,13 +116,36 @@ public class SimpleMovementScript : MonoBehaviour
         }
         HandleGravity();
         HandleJump();
-
+        HandleAim();
     }
     void SetupJumpVariables()
     {
         float timeToApex = maxJumpTime / 2;
         gravity = (-2 * maxJumpHeight) / Mathf.Pow(timeToApex, 2);
         initialJumpVelocity = (2 * maxJumpHeight) / timeToApex;
+    }
+
+    void HandleAim() // Tähtäämisen Handlaaja - kameran zoomaus ja aseen nostaminen
+    {
+        Debug.Log(isAimPressed);
+        if (!isAimPressed)
+        {
+            freelook.MoveToTopOfPrioritySubqueue();
+            //if(freelook.m_Lens.FieldOfView < fieldOfViewVal) 
+            //{ 
+            //    freelook.m_Lens.FieldOfView += zoomValue*Time.deltaTime;
+            //}
+            //freelook.m_LookAt = LookAtWhenNotAiming;
+        }
+        else if (isAimPressed)
+        {
+            freelookZoomed.MoveToTopOfPrioritySubqueue();
+            //if (freelook.m_Lens.FieldOfView > 35)
+            //{
+            //    freelook.m_Lens.FieldOfView -= zoomValue * Time.deltaTime;
+            //}
+            //freelook.m_LookAt = LookAtWhenAiming;
+        }
     }
 
     void HandleJump()
@@ -218,9 +271,25 @@ public class SimpleMovementScript : MonoBehaviour
         }
     }
 
-       // Kameran tilan vertaaminen liikkumisen käskyihin alkaa tästä eteenpäin 
+    // Tästä eteenpäin ragdolliin liittyvää asiaa
     /* ============================================================================================================================================ 
        ============================================================================================================================================
        ============================================================================================================================================ */
 
+    private void DeactivateRagdoll()
+    {
+        foreach (var rigidBody in rigidbodies)
+        {
+            rigidBody.isKinematic = true;
+        }
+        animator.enabled = true;
+    }
+    private void ActivateRagdoll()
+    {
+        foreach (var rigidBody in rigidbodies)
+        {
+            rigidBody.isKinematic = false;
+        }
+        animator.enabled = false;
+    }
 }

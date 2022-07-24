@@ -31,17 +31,17 @@
                 },
                 {
                     "name": "Run",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "615024fb-7ffd-458e-9661-cb47da95fe96",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 },
                 {
-                    "name": "Ultraspeed",
-                    "type": "Value",
-                    "id": "dd97db50-d82d-4c37-9b0c-2a3371ffce77",
-                    "expectedControlType": "",
+                    "name": "AimWeapon",
+                    "type": "Button",
+                    "id": "3c3f9905-94f9-4d69-b2f3-52238cbf6214",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 }
@@ -149,7 +149,7 @@
                 {
                     "name": "",
                     "id": "d77f5f14-98d1-455f-ae93-435c3a1af13c",
-                    "path": "<Gamepad>/leftShoulder",
+                    "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -159,12 +159,12 @@
                 },
                 {
                     "name": "",
-                    "id": "5472c802-621e-4c4a-a719-f9d240ec3d97",
-                    "path": "<Gamepad>/leftTrigger",
+                    "id": "5d59a481-b546-4936-b5d1-012d1e57578c",
+                    "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Ultraspeed",
+                    "action": "AimWeapon",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
