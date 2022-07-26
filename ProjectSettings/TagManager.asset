@@ -7,6 +7,10 @@ TagManager:
   - GunTag
   - VirtualCamera
   - VirtualCameraZoomed
+  - Reticle
+  - BarrelLocation
+  - Bullet
+  - DeathZone
   layers:
   - Default
   - TransparentFX
@@ -14,8 +18,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - Player
+  - Bullet
   - 
   - 
   - 

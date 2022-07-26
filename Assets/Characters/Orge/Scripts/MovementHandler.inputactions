@@ -11,7 +11,8 @@
                     "id": "f407fe88-9e15-4cad-8272-a311ea17729f",
                     "expectedControlType": "Vector2",
                     "processors": "NormalizeVector2",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Look",
@@ -19,7 +20,8 @@
                     "id": "d8ce988c-6872-4940-82b9-21303df224ca",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Jump",
@@ -27,7 +29,8 @@
                     "id": "d418aa91-cdfe-415b-9163-d94a0752e530",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Run",
@@ -35,7 +38,8 @@
                     "id": "615024fb-7ffd-458e-9661-cb47da95fe96",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "AimWeapon",
@@ -43,7 +47,17 @@
                     "id": "3c3f9905-94f9-4d69-b2f3-52238cbf6214",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ShootWeapon",
+                    "type": "Button",
+                    "id": "9d4058b5-2b63-4ef6-bd41-b398d7c44aca",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -165,6 +179,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "AimWeapon",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a7a169fb-131c-4c34-b18f-a769b3a61c54",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ShootWeapon",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

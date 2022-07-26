@@ -36,6 +36,14 @@ public class Ragdoll_script : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Bullet"))
+        {
+            ActivateRagdoll();
+        }
+    }
+
     private void DeactivateRagdoll()
     {
         foreach(var rigidBody in rigidbodies)
