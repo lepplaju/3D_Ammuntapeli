@@ -4,16 +4,20 @@ using UnityEngine;
 
 public class disableCollider : MonoBehaviour
 {
-    new Collider collider;
+    [SerializeField] GameObject gun;
+    Collider myCollider;
+    [SerializeField] private TimerScript timerScript;
 
     private void Start()
     {
-        collider = GetComponent<Collider>();
+        myCollider = GetComponent<Collider>();
     }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player")){
-            collider.enabled = false;
+            myCollider.enabled = false;
+            timerScript.myStart();
+            Destroy(gun);
         }
     }
 }

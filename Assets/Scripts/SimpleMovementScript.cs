@@ -4,13 +4,15 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Cinemachine;
 using UnityEngine.Animations.Rigging;
+using UnityEngine.SceneManagement;
 public class SimpleMovementScript : MonoBehaviour
 {
     [SerializeField] private AudioClip pistolAudio;
     [SerializeField] private AudioSource bulletAudioSource;
     Vector2 screenCenterPoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
     [SerializeField] Vector3 GunAimingOffset;
-    [SerializeField] GunHandle_script script;
+    [SerializeField] GunHandle_script gunHandle_script;
+    [SerializeField] TimerScript _timerScript;
     [SerializeField] Transform GunHolder;
     [SerializeField] GameObject newGun;
 
@@ -78,6 +80,7 @@ public class SimpleMovementScript : MonoBehaviour
     readonly float maxJumpTime = 1.0f;
     bool isJumping = false;
 
+    bool isR3Pressed;
     bool isAimPressed;
     bool isShootPressed;
     bool canShoot;
@@ -86,7 +89,7 @@ public class SimpleMovementScript : MonoBehaviour
     bool isRunning;
     [SerializeField] private MultiPositionConstraint multiPositionConstraint;
     [SerializeField] private LayerMask aimColliderLayerMask = new LayerMask();
-    [SerializeField] private Transform debugTransform;
+    [SerializeField] private Transform AimTarget;
 
     // Heti alussa tehdään kaikki tämän funktion sisällä oleva
     private void Awake()
@@ -121,16 +124,24 @@ public class SimpleMovementScript : MonoBehaviour
         playerInput.Controls.ShootWeapon.started += OnShoot;
         playerInput.Controls.ShootWeapon.canceled += OnShoot;
 
+        //Tason päättymisen handlaaja
+        playerInput.Controls.NextLevel.started += OnR3;
+        playerInput.Controls.NextLevel.canceled += OnR3;
+
         SetupJumpVariables();
         DeactivateRagdoll();
-    }
-    private void Start()
-    {
+
         gunNotAimingPose_Rig.weight = 0;
         gunHoldingRig.weight = 0;
         gunAimingRig_Rotation.weight = 0;
         multiPositionConstraint = gunAimingPose_Rig.GetComponentInChildren<MultiPositionConstraint>();
-        GunAimingOffset = new Vector3(-.15f, .4f, .45f);
+        GunAimingOffset = new Vector3(-.15f, .55f, .45f);
+    }
+
+
+    void OnR3(InputAction.CallbackContext context)
+    {
+        isR3Pressed = context.ReadValueAsButton();
     }
 
     void OnAim(InputAction.CallbackContext context)
@@ -183,10 +194,10 @@ public class SimpleMovementScript : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
         if(Physics.Raycast(ray,out RaycastHit raycastHit, 999f, aimColliderLayerMask))
         {
-            debugTransform.position = raycastHit.point;
+            AimTarget.position = raycastHit.point;
         }
 
-        Debug.Log("aim: "+isAimPressed+ " running: "+isRunning+ "jumping: "+isJumping );
+        //Debug.Log("aim: "+isAimPressed+ " running: "+isRunning+ "jumping: "+isJumping );
 
         if (!isAimPressed)
         {
@@ -233,14 +244,14 @@ public class SimpleMovementScript : MonoBehaviour
     {
         isGunEquipped = true;
         gunHoldingRig.weight = 1;
-        Invoke("getGunBarrel", .2f);
+        Invoke("getGunBarrel", .02f);
     }
 
     private void getGunBarrel() // Haetaan aseen piippu, josta luoti tulee lähtemään... Ase pitää hakea erikseen
     {
         GameObject newBarrel = GameObject.FindWithTag("BarrelLocation");
         gunBarrel = newBarrel.transform;
-        Invoke("getAudioSource", .2f);
+        Invoke("getAudioSource", .02f);
     }
     private void getAudioSource()
     {
@@ -252,11 +263,11 @@ public class SimpleMovementScript : MonoBehaviour
         if (isAimPressed && isShootPressed && canShoot)
         {
             bulletAudioSource.PlayOneShot(pistolAudio,0.1f);
-            Vector3 aimDir = (debugTransform.position - gunBarrel.position).normalized;
+            Vector3 aimDir = (AimTarget.position - gunBarrel.position).normalized;
             Instantiate(bulletPrefab, gunBarrel.position, Quaternion.LookRotation(aimDir,Vector3.up));
             canShoot = false;
-            Debug.Log(aimDir);
-            Debug.Log(Quaternion.LookRotation(aimDir, Vector3.up));
+            //Debug.Log(aimDir);
+            //Debug.Log(Quaternion.LookRotation(aimDir, Vector3.up));
         }
         else if (!isShootPressed){
             canShoot = true;
@@ -383,6 +394,16 @@ public class SimpleMovementScript : MonoBehaviour
         {
             Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);
             transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationFactorPerFrame * Time.deltaTime);
+        }
+    }
+
+    // Tason Päättyminen - aktivoidaan R3 että voidaan siirtyä seuraavaan tasoon
+    public void handleLevelChange()
+    {
+        if(_timerScript.gameIsFinished && isR3Pressed)
+        {
+            Debug.Log("R3 IS pressed");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
 

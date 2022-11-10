@@ -14,6 +14,17 @@
 /[Uu]ser[Ss]ettings/
 /Assets/Nokobot.meta
 /Assets/Nokobot/
+/Assets/TextMesh Pro
+/Assets/Adobe
+Assets/Adobe.meta
+Assets/Characters/Character 1.1.meta
+Assets/Characters/Character 1.1/
+Assets/Characters/Enemies/Guard/Enemy_prefab.prefab
+Assets/Characters/Enemies/Guard/Enemy_prefab.prefab.meta
+Assets/Materials/
+Assets/Objects/
+Assets/Prefabs/
+Assets/Scenes/
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data

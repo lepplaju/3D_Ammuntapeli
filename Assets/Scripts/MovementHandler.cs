@@ -80,6 +80,15 @@ public partial class @MovementHandler : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NextLevel"",
+                    ""type"": ""Button"",
+                    ""id"": ""576ab19b-6b46-4803-8110-dc72cef8a1b5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -214,6 +223,17 @@ public partial class @MovementHandler : IInputActionCollection2, IDisposable
                     ""action"": ""ShootWeapon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3b811ec1-c5da-4e92-bb49-370ab2833b34"",
+                    ""path"": ""<Gamepad>/rightStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextLevel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -228,6 +248,7 @@ public partial class @MovementHandler : IInputActionCollection2, IDisposable
         m_Controls_Run = m_Controls.FindAction("Run", throwIfNotFound: true);
         m_Controls_AimWeapon = m_Controls.FindAction("AimWeapon", throwIfNotFound: true);
         m_Controls_ShootWeapon = m_Controls.FindAction("ShootWeapon", throwIfNotFound: true);
+        m_Controls_NextLevel = m_Controls.FindAction("NextLevel", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -293,6 +314,7 @@ public partial class @MovementHandler : IInputActionCollection2, IDisposable
     private readonly InputAction m_Controls_Run;
     private readonly InputAction m_Controls_AimWeapon;
     private readonly InputAction m_Controls_ShootWeapon;
+    private readonly InputAction m_Controls_NextLevel;
     public struct ControlsActions
     {
         private @MovementHandler m_Wrapper;
@@ -303,6 +325,7 @@ public partial class @MovementHandler : IInputActionCollection2, IDisposable
         public InputAction @Run => m_Wrapper.m_Controls_Run;
         public InputAction @AimWeapon => m_Wrapper.m_Controls_AimWeapon;
         public InputAction @ShootWeapon => m_Wrapper.m_Controls_ShootWeapon;
+        public InputAction @NextLevel => m_Wrapper.m_Controls_NextLevel;
         public InputActionMap Get() { return m_Wrapper.m_Controls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -330,6 +353,9 @@ public partial class @MovementHandler : IInputActionCollection2, IDisposable
                 @ShootWeapon.started -= m_Wrapper.m_ControlsActionsCallbackInterface.OnShootWeapon;
                 @ShootWeapon.performed -= m_Wrapper.m_ControlsActionsCallbackInterface.OnShootWeapon;
                 @ShootWeapon.canceled -= m_Wrapper.m_ControlsActionsCallbackInterface.OnShootWeapon;
+                @NextLevel.started -= m_Wrapper.m_ControlsActionsCallbackInterface.OnNextLevel;
+                @NextLevel.performed -= m_Wrapper.m_ControlsActionsCallbackInterface.OnNextLevel;
+                @NextLevel.canceled -= m_Wrapper.m_ControlsActionsCallbackInterface.OnNextLevel;
             }
             m_Wrapper.m_ControlsActionsCallbackInterface = instance;
             if (instance != null)
@@ -352,6 +378,9 @@ public partial class @MovementHandler : IInputActionCollection2, IDisposable
                 @ShootWeapon.started += instance.OnShootWeapon;
                 @ShootWeapon.performed += instance.OnShootWeapon;
                 @ShootWeapon.canceled += instance.OnShootWeapon;
+                @NextLevel.started += instance.OnNextLevel;
+                @NextLevel.performed += instance.OnNextLevel;
+                @NextLevel.canceled += instance.OnNextLevel;
             }
         }
     }
@@ -364,5 +393,6 @@ public partial class @MovementHandler : IInputActionCollection2, IDisposable
         void OnRun(InputAction.CallbackContext context);
         void OnAimWeapon(InputAction.CallbackContext context);
         void OnShootWeapon(InputAction.CallbackContext context);
+        void OnNextLevel(InputAction.CallbackContext context);
     }
 }
